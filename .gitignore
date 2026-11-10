@@ -1,0 +1,9 @@
+# 本地预览 / 系统文件
+.DS_Store
+*.local
+
+# 口令网关与部署配置：含明文口令，不进公开仓库
+netlify.toml
+netlify/
+.netlifyignore
+login.html

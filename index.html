@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>工单分析工作台</title>
+<link rel="icon" type="image/png" href="icons/logo-32.png">
+<!-- 数字字体（OPPO Sans 3.0 子集）预加载，避免首屏数字先用后备字体再跳变 -->
+<link rel="preload" href="fonts/OPlusSans3Num-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/OPlusSans3Num-Medium.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/OPlusSans3Num-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css?v=59">
+</head>
+<body>
+<a class="skip-link" href="#main">跳到主要内容</a>
+
+<svg class="sprite" aria-hidden="true" focusable="false"><defs>
+  <linearGradient id="g-bar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6D97FF"/><stop offset="1" stop-color="#265FE5"/></linearGradient>
+  <linearGradient id="g-s1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4C7DFF"/><stop offset="1" stop-color="#265FE5"/></linearGradient>
+  <linearGradient id="g-s2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#45D3DF"/><stop offset="1" stop-color="#12B5C9"/></linearGradient>
+  <linearGradient id="g-s3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFA46B"/><stop offset="1" stop-color="#FF7A45"/></linearGradient>
+  <linearGradient id="g-s4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C6CDDA"/><stop offset="1" stop-color="#A6AEC2"/></linearGradient>
+  <linearGradient id="g-line" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#265FE5"/><stop offset="1" stop-color="#7A5AF8"/></linearGradient>
+  <linearGradient id="g-area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#265FE5" stop-opacity=".20"/><stop offset="1" stop-color="#265FE5" stop-opacity="0"/></linearGradient>
+
+  <mask id="m-help" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+    <rect width="24" height="24" fill="#fff"/>
+    <path d="M9.1 9.4a3 3 0 1 1 4.2 2.7c-.9.4-1.3 1.1-1.3 2.1" fill="none" stroke="#000" stroke-width="2.1" stroke-linecap="round"/>
+    <circle cx="12" cy="17.4" r="1.3" fill="#000"/>
+  </mask>
+  <mask id="m-info" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+    <rect width="24" height="24" fill="#fff"/>
+    <circle cx="12" cy="7.9" r="1.35" fill="#000"/>
+    <rect x="10.7" y="10.6" width="2.6" height="6.6" rx="1.3" fill="#000"/>
+  </mask>
+  <mask id="m-alert" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+    <rect width="24" height="24" fill="#fff"/>
+    <path d="M12 8.6v5.2" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="12" cy="17.4" r="1.25" fill="#000"/>
+  </mask>
+  <mask id="m-clock" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+    <rect width="24" height="24" fill="#fff"/>
+    <path d="M12 6.6V12l3.4 2.1" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </mask>
+  <mask id="m-pie" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+    <rect width="24" height="24" fill="#fff"/>
+    <path d="M12 12V2.7M12 12h9.3" stroke="#000" stroke-width="2.1" stroke-linecap="round"/>
+  </mask>
+
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2.2"/><rect x="13" y="3" width="8" height="8" rx="2.2"/><rect x="3" y="13" width="8" height="8" rx="2.2"/><rect x="13" y="13" width="8" height="8" rx="2.2"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M13.6 2.4H7A3 3 0 0 0 4 5.4v13.2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8.8zM8.6 11.8h6.8v1.9H8.6zm0 3.6h4.6v1.9H8.6z"/></symbol>
+  <symbol id="i-pie" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.2" mask="url(#m-pie)"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><circle cx="17.4" cy="5.6" r="3.2"/><circle cx="6.2" cy="12" r="3.2"/><circle cx="17.4" cy="18.4" r="3.2"/><path d="M8.8 10.3 16 6.3l.9 1.7-7.2 4zm0 3.4 7.2 4-.9 1.7-7.2-4z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M10.6 2.6a8.2 8.2 0 1 1 0 16.4 8.2 8.2 0 0 1 0-16.4zm0 3a5.2 5.2 0 1 0 0 10.4 5.2 5.2 0 0 0 0-10.4z"/><path d="M17 17l4 4" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M12 2.4a7.2 7.2 0 0 0-7.2 7.2v3.1l-1.4 2.6a1.5 1.5 0 0 0 1.3 2.2h14.6a1.5 1.5 0 0 0 1.3-2.2l-1.4-2.6V9.6A7.2 7.2 0 0 0 12 2.4z"/><path d="M9.7 19.2h4.6a2.3 2.3 0 0 1-4.6 0z"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.2" mask="url(#m-help)"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20.4 12a8.4 8.4 0 1 1-3-6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M20.8 3.4v6h-6z"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M10.9 2.8h2.2v8.6l3.2-3.2 1.5 1.5L12 15.5 6.2 9.7l1.5-1.5 3.2 3.2z"/><rect x="4" y="17.9" width="16" height="2.6" rx="1.3"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M10.7 3.6h2.6v7.1h7.1v2.6h-7.1v7.1h-2.6v-7.1H3.6v-2.6h7.1z"/></symbol>
+  <symbol id="i-chev-right" viewBox="0 0 24 24"><path d="M9.5 4.6 17.4 12l-7.9 7.4-2-2.1 5.6-5.3-5.6-5.3z"/></symbol>
+  <symbol id="i-chev-down" viewBox="0 0 24 24"><path d="M12 16.6 4.2 9.4 6.3 7.2 12 12.4l5.7-5.2 2.1 2.2z"/></symbol>
+  <symbol id="i-chev-up" viewBox="0 0 24 24"><path d="M12 7.4 19.8 14.6l-2.1 2.2L12 11.6l-5.7 5.2-2.1-2.2z"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M13.3 4.2 21.1 12l-7.8 7.8-1.9-1.9 4.5-4.6H3v-2.6h12.9l-4.5-4.6z"/></symbol>
+  <symbol id="i-trend-up" viewBox="0 0 24 24"><rect x="3.4" y="12.6" width="4.2" height="8" rx="1.4"/><rect x="10" y="8.4" width="4.2" height="12.2" rx="1.4"/><rect x="16.6" y="3.6" width="4.2" height="17" rx="1.4"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M16.4 2.9a2.7 2.7 0 0 1 3.8 0l1 1a2.7 2.7 0 0 1 0 3.8l-1.9 1.9-4.8-4.8zM13 6.3l4.8 4.8-9.2 9.2-4.4 1.1a.9.9 0 0 1-1.1-1.1l1.1-4.4z"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M9.4 2.6h5.2a1.6 1.6 0 0 1 1.6 1.6V5h3.4a1.1 1.1 0 0 1 0 2.2H4.4a1.1 1.1 0 0 1 0-2.2h3.4v-.8a1.6 1.6 0 0 1 1.6-1.6zM5.6 8.8h12.8l-.8 11a2 2 0 0 1-2 1.9H8.4a2 2 0 0 1-2-1.9zm3.6 2.4a.9.9 0 0 0-.9.9v6.4a.9.9 0 0 0 1.8 0v-6.4a.9.9 0 0 0-.9-.9zm5.6 0a.9.9 0 0 0-.9.9v6.4a.9.9 0 0 0 1.8 0v-6.4a.9.9 0 0 0-.9-.9z"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6.2 6.2 17.8 17.8M17.8 6.2 6.2 17.8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9.2" cy="8.2" r="3.7"/><path d="M2.8 19.4c0-3.3 2.9-5.6 6.4-5.6s6.4 2.3 6.4 5.6c0 .9-.7 1.6-1.6 1.6H4.4c-.9 0-1.6-.7-1.6-1.6z"/><circle cx="17.4" cy="8.6" r="2.9" opacity=".55"/><path d="M17.2 14.1c2.5.3 4.4 2.2 4.4 4.6 0 .8-.6 1.4-1.4 1.4h-1.7c.3-.4.5-1 .5-1.6 0-1.7-.7-3.3-1.8-4.4z" opacity=".55"/></symbol>
+  <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="7.8" r="4.2"/><path d="M3.8 20.2c0-3.7 3.7-6.4 8.2-6.4s8.2 2.7 8.2 6.4c0 .9-.7 1.5-1.6 1.5H5.4c-.9 0-1.6-.6-1.6-1.5z"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 2.4c.7 0 1.35.37 1.7.97l8.1 14.2c.7 1.23-.18 2.77-1.6 2.77H3.8c-1.42 0-2.3-1.54-1.6-2.77l8.1-14.2c.35-.6 1-.97 1.7-.97z" mask="url(#m-alert)"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2.4c3.9 0 7.1 3.2 7.1 7.1 0 4.9-5.6 10.4-6.6 11.4a.7.7 0 0 1-1 0C10.5 19.9 4.9 14.4 4.9 9.5c0-3.9 3.2-7.1 7.1-7.1zm0 4.4a2.9 2.9 0 1 0 0 5.8 2.9 2.9 0 0 0 0-5.8z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.2" mask="url(#m-clock)"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M7.6 2.2a1.2 1.2 0 0 1 1.2 1.2v1.1h6.4V3.4a1.2 1.2 0 0 1 2.4 0v1.1h1A3 3 0 0 1 21.6 7.5v10.9a3 3 0 0 1-3 3H5.4a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3h1V3.4a1.2 1.2 0 0 1 1.2-1.2zM4.8 9.4v9c0 .33.27.6.6.6h13.2a.6.6 0 0 0 .6-.6v-9zm2.6 2.2h2.4v2.4H7.4zm4.4 0h2.4v2.4h-2.4zm4.4 0h2.4v2.4h-2.4zM7.4 14.7h2.4V17H7.4zm4.4 0h2.4V17h-2.4z"/></symbol>
+  <symbol id="i-building" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M4.4 4.6A2.2 2.2 0 0 1 6.6 2.4h5.8a2.2 2.2 0 0 1 2.2 2.2V9h3.2a2.2 2.2 0 0 1 2.2 2.2v10.4H21v1.8H3v-1.8h1.4zM7.4 6.6h1.8v1.8H7.4zm3.6 0h1.8v1.8H11zm-3.6 3.8h1.8V12H7.4zm3.6 0h1.8V12H11zm-3.6 3.8h1.8v1.8H7.4zm3.6 0h1.8v1.8H11zM16 12.4h1.8v1.8H16zm0 3.8h1.8v1.8H16z"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2.4a9.6 9.6 0 1 1 0 19.2 9.6 9.6 0 0 1 0-19.2zm0 2.2a7.4 7.4 0 1 0 0 14.8 7.4 7.4 0 0 0 0-14.8zm0 2.4a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2.2a2.8 2.8 0 1 0 0 5.6 2.8 2.8 0 0 0 0-5.6z"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 24 24"><rect x="3.4" y="4.8" width="17.2" height="2.8" rx="1.4"/><rect x="6.6" y="10.6" width="10.8" height="2.8" rx="1.4"/><rect x="9.6" y="16.4" width="4.8" height="2.8" rx="1.4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4.8 12.6 9.2 17 19.4 6.8" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.2" mask="url(#m-info)"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 2.4 22.2 8 12 13.6 1.8 8z"/><path d="m2.6 11.5 9.4 5.2 9.4-5.2 1.7 1-11.1 6.1L.9 12.5z" opacity=".65"/><path d="m2.6 15.9 9.4 5.2 9.4-5.2 1.7 1L12 23 1 16.9z" opacity=".4"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><circle cx="4.6" cy="6.4" r="1.7"/><circle cx="4.6" cy="12" r="1.7"/><circle cx="4.6" cy="17.6" r="1.7"/><rect x="8.4" y="5" width="12" height="2.8" rx="1.4"/><rect x="8.4" y="10.6" width="12" height="2.8" rx="1.4"/><rect x="8.4" y="16.2" width="12" height="2.8" rx="1.4"/></symbol>
+</defs></svg>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#" aria-label="工单分析工作台">
+      <img class="brand-mark" src="icons/logo.png" alt="" aria-hidden="true">
+      <span class="brand-name">工单分析工作台</span>
+    </a>
+    <div class="topbar-right">
+      <span class="sync-note"><svg class="ico ico-xs" aria-hidden="true"><use href="#i-check"/></svg>数据更新于 10:24</span>
+      <span class="topbar-sep" aria-hidden="true"></span>
+      <button class="user-btn" type="button" aria-label="当前账号：管理员">
+        <span class="avatar" aria-hidden="true">管</span>
+        <span class="user-name">管理员</span>
+        <svg class="ico ico-xs" aria-hidden="true"><use href="#i-chev-down"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="page">
+  <section class="filter-bar" aria-label="数据筛选">
+    <div class="field">
+      <label id="date-label">查询时间段</label>
+      <div class="date-period" id="date-period">
+        <button class="select-trigger date-trigger" id="date-trigger" type="button"
+                aria-haspopup="dialog" aria-expanded="false" aria-controls="date-panel" aria-labelledby="date-label">
+          <svg class="ico ico-xs date-ico" aria-hidden="true"><use href="#i-calendar"/></svg>
+          <span class="select-value" id="date-value">2026/09/01 至 2026/09/30</span>
+          <svg class="ico ico-xs select-caret" aria-hidden="true"><use href="#i-chev-down"/></svg>
+        </button>
+        <div class="dropdown-panel date-panel" id="date-panel" hidden>
+          <div class="date-quick">
+            <span class="date-quick-title">快捷时间段</span>
+            <div class="date-quick-grid">
+              <button class="date-preset" type="button" data-days="7">近一周</button>
+              <button class="date-preset" type="button" data-days="30">近一个月</button>
+              <button class="date-preset" type="button" data-days="183">近半年</button>
+              <button class="date-preset" type="button" data-days="365">近一年</button>
+            </div>
+          </div>
+          <div class="date-custom">
+            <span class="date-quick-title">自定义时间段</span>
+            <div class="date-range">
+              <input type="date" id="f-date-start" value="2026-09-01" aria-label="时间段开始日期">
+              <span class="range-sep">至</span>
+              <input type="date" id="f-date-end" value="2026-09-30" aria-label="时间段结束日期">
+            </div>
+            <p class="date-days" id="date-days">共 30 天</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label for="f-cat">市局业务分类</label>
+      <div class="select-wrap">
+        <select id="f-cat">
+          <option value="all">全部分类</option>
+          <option value="交通管理">交通管理</option>
+          <option value="物业管理">物业管理</option>
+          <option value="市容环境">市容环境</option>
+          <option value="生态环保">生态环保</option>
+          <option value="涉黄涉赌">涉黄涉赌</option>
+          <option value="政风行风">政风行风</option>
+          <option value="治安管理">治安管理</option>
+          <option value="市场监督">市场监督</option>
+          <option value="民生保障">民生保障</option>
+        </select>
+        <svg class="ico ico-xs select-caret" aria-hidden="true"><use href="#i-chev-down"/></svg>
+      </div>
+    </div>
+    <div class="field">
+      <label for="f-org">承办单位</label>
+      <div class="select-wrap">
+        <select id="f-org">
+          <option value="all">全部单位</option>
+          <option value="市公安局治安支队">市公安局治安支队</option>
+          <option value="市生态环境局">市生态环境局</option>
+          <option value="市市场监管综合执法局">市市场监管综合执法局</option>
+          <option value="交通综合行政执法队">交通综合行政执法队</option>
+          <option value="市城市管理局">市城市管理局</option>
+          <option value="市住房城乡建设局">市住房城乡建设局</option>
+          <option value="市纪委监委驻局纪检组">市纪委监委驻局纪检组</option>
+          <option value="市民政局">市民政局</option>
+        </select>
+        <svg class="ico ico-xs select-caret" aria-hidden="true"><use href="#i-chev-down"/></svg>
+      </div>
+    </div>
+    <div class="field">
+      <label id="type-label">工单类型</label>
+      <div class="dropdown" id="type-dd">
+        <div class="select-trigger" id="type-trigger" role="combobox" tabindex="0"
+             aria-haspopup="listbox" aria-expanded="false" aria-controls="type-panel" aria-labelledby="type-label">
+          <span class="select-value" id="type-value">全部类型</span>
+          <button class="select-clear" type="button" id="type-clear-inline" aria-label="清空工单类型" hidden>
+            <svg class="ico" aria-hidden="true"><use href="#i-x"/></svg>
+          </button>
+          <svg class="ico ico-xs select-caret" aria-hidden="true"><use href="#i-chev-down"/></svg>
+        </div>
+        <div class="dropdown-panel" id="type-panel" hidden>
+          <div class="dropdown-search">
+            <svg class="ico ico-xs" aria-hidden="true"><use href="#i-search"/></svg>
+            <input type="search" id="type-search" placeholder="搜索工单类型" aria-label="搜索工单类型">
+          </div>
+          <div class="dropdown-tools">
+            <button class="link-btn" type="button" id="type-all">全选</button>
+            <button class="link-btn" type="button" id="type-clear">清空</button>
+            <span class="dropdown-count" id="type-count">已选 0 项</span>
+          </div>
+          <ul class="dropdown-list" id="type-list" role="listbox" aria-multiselectable="true" aria-label="工单类型"></ul>
+        </div>
+      </div>
+    </div>
+    <div class="field field-grow">
+      <label for="f-kw">内容检索</label>
+      <div class="input-wrap">
+        <svg class="ico ico-xs input-icon" aria-hidden="true"><use href="#i-search"/></svg>
+        <input type="search" id="f-kw" placeholder="输入内容摘要、号码或点位关键词">
+      </div>
+    </div>
+    <div class="filter-actions">
+      <button class="btn btn-ghost" type="button" id="btn-reset">重置</button>
+      <button class="btn btn-primary" type="button" id="btn-query"><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg>查询</button>
+    </div>
+  </section>
+
+  <div class="layout">
+    <div class="col-main">
+
+      <section class="overview" aria-label="数据概览">
+        <article class="card kpi-card">
+          <header class="card-head">
+            <div class="card-title">
+              <img class="card-ico" src="icons/ticket-volume.png" alt="" aria-hidden="true">
+              <h2>工单量</h2>
+            </div>
+            <button class="link-btn" type="button" id="btn-kpi-detail">查看明细</button>
+          </header>
+          <div class="kpi-value"><span class="kpi-num" id="kpi-total">190</span><span class="kpi-unit">件</span></div>
+          <div class="kpi-deltas">
+            <span class="delta up"><svg class="ico ico-xs" aria-hidden="true"><use href="#i-trend-up"/></svg>同比 8.6%</span>
+            <span class="delta down"><svg class="ico ico-xs" aria-hidden="true"><use href="#i-chev-down"/></svg>环比 4.2%</span>
+            <span class="delta flat">日均 6.3 件</span>
+          </div>
+          <p class="kpi-note">本期受理量高于近三个月均值，主要集中在环卫保洁、社区治安两类。</p>
+        </article>
+
+        <article class="card">
+          <header class="card-head">
+            <div class="card-title">
+              <img class="card-ico" src="icons/ticket-type.png" alt="" aria-hidden="true">
+              <h2>工单类型占比</h2>
+            </div>
+            <span class="card-meta">共 190 件 · 点击扇区下钻</span>
+          </header>
+          <div class="split-body">
+            <div class="donut" id="donut-type"></div>
+            <ul class="legend" id="legend-type"></ul>
+          </div>
+        </article>
+
+        <article class="card">
+          <header class="card-head">
+            <div class="card-title">
+              <img class="card-ico" src="icons/ticket-source.png" alt="" aria-hidden="true">
+              <h2>工单来源占比</h2>
+            </div>
+            <span class="card-meta">共 190 件 · 点击扇区下钻</span>
+          </header>
+          <div class="split-body">
+            <div class="donut" id="donut-source"></div>
+            <ul class="legend" id="legend-source"></ul>
+          </div>
+        </article>
+      </section>
+
+      <section class="card" aria-labelledby="cat-title">
+        <header class="card-head">
+          <div class="card-title">
+            <img class="card-ico" src="icons/category.png" alt="" aria-hidden="true">
+            <h2 id="cat-title">市局业务分类</h2>
+            <span class="card-meta" id="cat-meta">21 个分类 · 190 件</span>
+          </div>
+          <div class="seg" role="tablist" aria-label="业务分类层级" id="cat-seg">
+            <button type="button" role="tab" aria-selected="true" data-level="1">一级分类</button>
+            <button type="button" role="tab" aria-selected="false" data-level="2">二级分类</button>
+            <button type="button" role="tab" aria-selected="false" data-level="3">三级分类</button>
+          </div>
+        </header>
+        <div class="chart-col" id="cat-chart" role="img"></div>
+        <div class="drill-inline" id="cat-drill" hidden>
+          <div class="drill-inline-head">
+            <h3 id="cat-drill-title">市局业务分类下探</h3>
+            <div class="drill-inline-actions">
+              <button class="link-btn" type="button" id="cat-drill-orders">查看</button>
+              <button class="link-btn" type="button" id="cat-drill-close">收起下探</button>
+            </div>
+          </div>
+          <div class="quad quad-drill">
+            <div class="quad-panel">
+              <h3 class="mini-title"><svg class="ico ico-xs" aria-hidden="true"><use href="#i-layers"/></svg>子类分布</h3>
+              <div class="chart-drill" id="cat-d-sub" role="img"></div>
+            </div>
+            <div class="quad-panel">
+              <h3 class="mini-title"><svg class="ico ico-xs" aria-hidden="true"><use href="#i-pin"/></svg>点位分析</h3>
+              <div class="chart-drill" id="cat-d-point" role="img"></div>
+            </div>
+            <div class="quad-panel">
+              <h3 class="mini-title"><svg class="ico ico-xs" aria-hidden="true"><use href="#i-trend-up"/></svg>趋势分布</h3>
+              <div class="chart-drill chart-trend" id="cat-d-trend" role="img"></div>
+            </div>
+            <div class="quad-panel">
+              <h3 class="mini-title"><svg class="ico ico-xs" aria-hidden="true"><use href="#i-building"/></svg>单位分布</h3>
+              <div class="chart-drill" id="cat-d-org" role="img"></div>
+            </div>
+          </div>
+        </div>
+        <footer class="card-foot">
+          <span>单位：件</span>
+          <span class="sep-dot" aria-hidden="true"></span>
+          <span>点击柱体可下探子类、点位、趋势与承办单位</span>
+          <button class="link-btn card-foot-end" type="button" id="cat-clear" hidden>清除筛选</button>
+        </footer>
+      </section>
+
+      <section class="card" aria-labelledby="demander-title">
+        <header class="card-head">
+          <div class="card-title">
+            <img class="card-ico" src="icons/demand.png" alt="" aria-hidden="true">
+            <h2 id="demander-title">重点诉求人分析（人）</h2>
+            <span class="card-meta">按近 90 天诉求次数排序</span>
+          </div>
+          <span class="hint"><svg class="ico ico-xs" aria-hidden="true"><use href="#i-info"/></svg>点击任一诉求人查看下探详情</span>
+        </header>
+        <div class="duo">
+          <div class="duo-panel">
+            <div class="panel-head">
+              <h3 class="panel-title"><img class="ico panel-ico" src="icons/multi-claim.png" alt="" aria-hidden="true">一人多诉</h3>
+              <div class="seg seg-mini" role="tablist" aria-label="一人多诉口径" data-panel="repeat">
+                <button type="button" role="tab" aria-selected="true" data-set="repeat">一人多诉</button>
+                <button type="button" role="tab" aria-selected="false" data-set="reassign">重新交办</button>
+              </div>
+            </div>
+            <ul class="legend legend-inline panel-legend" id="legend-repeat"></ul>
+            <div class="chart-mid" id="repeat-chart" role="img"></div>
+          </div>
+          <div class="duo-panel">
+            <div class="panel-head">
+              <h3 class="panel-title"><img class="ico panel-ico" src="icons/repeat-claim.png" alt="" aria-hidden="true">一人同诉</h3>
+              <div class="seg seg-mini" role="tablist" aria-label="一人同诉口径" data-panel="same">
+                <button type="button" role="tab" aria-selected="true" data-set="same">相同分类</button>
+                <button type="button" role="tab" aria-selected="false" data-set="reassign">重新交办</button>
+              </div>
+            </div>
+            <div class="chart-mid" id="same-chart" role="img"></div>
+          </div>
+        </div>
+        <div class="drill-inline" id="person-drill" hidden>
+          <div class="drill-inline-head">
+            <h3 id="person-drill-title">重点诉求人下探</h3>
+            <div class="drill-inline-actions">
+              <button class="link-btn" type="button" id="person-drill-orders">查看</button>
+              <button class="link-btn" type="button" id="person-drill-close">收起下探</button>
+            </div>
+          </div>
+          <div class="quad quad-drill">
+            <div class="quad-panel">
+              <h3 class="mini-title"><svg class="ico ico-xs" aria-hidden="true"><use href="#i-layers"/></svg>市局业务分类</h3>
+              <div class="chart-drill" id="pd-cats" role="img"></div>
+            </div>
+            <div class="quad-panel">
+              <h3 class="mini-title"><svg class="ico ico-xs" aria-hidden="true"><use href="#i-pin"/></svg>点位分布</h3>
+              <div class="chart-drill" id="pd-points" role="img"></div>
+            </div>
+            <div class="quad-panel">
+              <h3 class="mini-title"><svg class="ico ico-xs" aria-hidden="true"><use href="#i-trend-up"/></svg>趋势分布</h3>
+              <div class="chart-drill chart-trend" id="pd-trend" role="img"></div>
+            </div>
+            <div class="quad-panel">
+              <h3 class="mini-title"><svg class="ico ico-xs" aria-hidden="true"><use href="#i-building"/></svg>单位分布</h3>
+              <div class="chart-drill" id="pd-units" role="img"></div>
+            </div>
+          </div>
+          <p class="drill-note" id="person-drill-note"></p>
+        </div>
+      </section>
+
+      <!-- 瀑布流：群发预警（事）与重点点位（地）与上方模块同宽，两列错落排列 -->
+      <div class="waterfall">
+        <section class="card table-card" aria-labelledby="warn-title">
+          <header class="card-head">
+            <div class="card-title">
+              <img class="card-ico" src="icons/alert.png" alt="" aria-hidden="true">
+              <h2 id="warn-title">群发预警监测（事）</h2>
+              <span class="badge badge-danger"><span class="live-dot" aria-hidden="true"></span>当前触发 38 起</span>
+            </div>
+            <button class="link-btn" type="button" id="btn-warn-all">查看全部</button>
+          </header>
+          <div class="filter-chips" id="warn-filter" hidden></div>
+          <div class="table-wrap">
+            <table class="table">
+              <caption class="sr-only">群发预警点位明细，可按工单量排序</caption>
+              <thead>
+                <tr>
+                  <th scope="col">点位</th>
+                  <th scope="col">市局业务分类</th>
+                  <th scope="col" class="num">
+                    <button type="button" class="sort" data-key="count" aria-label="按工单量排序">工单量<svg class="ico ico-xs" aria-hidden="true"><use href="#i-chev-down"/></svg></button>
+                  </th>
+                  <th scope="col" class="num">
+                    <button type="button" class="sort" data-key="time" aria-label="按最近发生时间排序">最近发生时间<svg class="ico ico-xs" aria-hidden="true"><use href="#i-chev-down"/></svg></button>
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="warn-tbody"></tbody>
+            </table>
+          </div>
+          <footer class="card-foot table-foot">
+            <span id="warn-summary">共 38 条预警，已展示全部点位</span>
+            <button class="link-btn card-foot-end" type="button" data-toast="预警明细已开始导出，完成后将通过站内信通知">导出明细</button>
+          </footer>
+        </section>
+
+        <section class="card point-card" aria-labelledby="point-title">
+          <header class="card-head">
+            <div class="card-title">
+              <img class="card-ico" src="icons/point.png" alt="" aria-hidden="true">
+              <h2 id="point-title">重点点位分析（地）</h2>
+            </div>
+            <span class="badge">前 10 重点点位</span>
+          </header>
+          <div class="hbars hbars-ranked" id="point-list"></div>
+          <footer class="card-foot">
+            <span>口径：近 30 天同一小区 / 商圈触发 ≥3 件</span>
+            <span class="card-foot-end">单位：件</span>
+          </footer>
+        </section>
+
+        <!-- 点位下探：宽度与瀑布流一致，横跨两列 -->
+        <section class="card drill-card" id="point-drill" aria-label="重点点位下探" hidden>
+          <div class="drill-inline-head">
+            <h3 id="point-drill-title">重点点位下探</h3>
+            <div class="drill-inline-actions">
+              <button class="link-btn" type="button" id="point-drill-orders">查看</button>
+              <button class="link-btn" type="button" id="point-drill-close">收起下探</button>
+            </div>
+          </div>
+          <div class="quad quad-drill quad-2">
+            <div class="quad-panel">
+              <h3 class="mini-title"><svg class="ico ico-xs" aria-hidden="true"><use href="#i-layers"/></svg>市局业务分类</h3>
+              <div class="chart-drill" id="ptd-cats" role="img"></div>
+            </div>
+            <div class="quad-panel">
+              <h3 class="mini-title"><svg class="ico ico-xs" aria-hidden="true"><use href="#i-file"/></svg>工单类型</h3>
+              <div class="chart-drill" id="ptd-types" role="img"></div>
+            </div>
+            <div class="quad-panel">
+              <h3 class="mini-title"><svg class="ico ico-xs" aria-hidden="true"><use href="#i-trend-up"/></svg>趋势分布</h3>
+              <div class="chart-drill chart-trend" id="ptd-trend" role="img"></div>
+            </div>
+            <div class="quad-panel">
+              <h3 class="mini-title"><svg class="ico ico-xs" aria-hidden="true"><use href="#i-building"/></svg>单位分布</h3>
+              <div class="chart-drill" id="ptd-org" role="img"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <aside class="col-rail" aria-labelledby="focus-title">
+      <section class="card focus-card">
+        <header class="card-head">
+          <div class="card-title">
+            <img class="card-ico" src="icons/focus.png" alt="" aria-hidden="true">
+            <h2 id="focus-title">重点关注事项</h2>
+            <span class="badge" id="focus-count">3 / 10</span>
+          </div>
+          <button class="btn btn-subtle" type="button" id="btn-add-focus"><svg class="ico ico-xs" aria-hidden="true"><use href="#i-plus"/></svg>添加事项</button>
+        </header>
+        <div class="quota" role="presentation">
+          <div class="quota-track"><span class="quota-fill" id="focus-progress" style="width:30%"></span></div>
+          <p class="quota-note">关注额度 3 / 10，还可添加 7 项</p>
+        </div>
+        <div class="focus-list" id="focus-list"></div>
+        <footer class="focus-foot">
+          <svg class="ico ico-xs" aria-hidden="true"><use href="#i-info"/></svg>
+          <span>关注事项将同步至每日研判简报与责任单位督办清单。</span>
+        </footer>
+      </section>
+    </aside>
+  </div>
+
+  <footer class="page-footer">
+    <span>数据来源：12345 政务服务便民热线 · 市公安局</span>
+    <span class="sep-dot" aria-hidden="true"></span>
+    <span>口径：按工单受理时间统计，同一诉求人多单合并计数</span>
+    <span class="footer-end">仅限内部研判使用</span>
+  </footer>
+</main>
+
+<div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-hidden="true">
+  <header class="drawer-head">
+    <div class="drawer-heading dlg-head-main">
+      <img class="dialog-ico" id="drawer-ico" src="icons/focus.png" alt="" aria-hidden="true">
+      <div class="dlg-head-text">
+        <h2 id="drawer-title"><span id="drawer-title-text">明细</span></h2>
+        <p class="drawer-sub" id="drawer-sub"></p>
+      </div>
+    </div>
+    <button class="icon-btn" type="button" id="drawer-close" aria-label="关闭明细"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></button>
+  </header>
+  <div class="drawer-body" id="drawer-body"></div>
+  <footer class="drawer-foot" id="drawer-foot"></footer>
+</aside>
+
+<div class="toast-region" id="toast-region" role="status" aria-live="polite"></div>
+
+<dialog class="dialog orders-dialog" id="orders-dialog" aria-labelledby="orders-dialog-title">
+  <header class="dialog-head orders-head">
+    <div class="orders-heading dlg-head-main">
+      <img class="dialog-ico" src="icons/orders.png" alt="" aria-hidden="true">
+      <div class="dlg-head-text">
+        <h2 id="orders-dialog-title"><span id="orders-title-text">工单列表</span></h2>
+        <p class="orders-sub" id="orders-sub"></p>
+      </div>
+    </div>
+    <div class="orders-head-actions">
+      <button class="btn btn-subtle btn-sm" type="button" id="orders-export"><svg class="ico ico-xs" aria-hidden="true"><use href="#i-download"/></svg>导出</button>
+      <button class="icon-btn" type="button" id="orders-close" aria-label="关闭工单列表"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></button>
+    </div>
+  </header>
+  <div class="orders-body">
+    <table class="table orders-table" id="orders-table">
+      <caption class="sr-only">工单列表，33 列完整字段，可横向滚动查看，分页浏览</caption>
+      <colgroup id="orders-cols"></colgroup>
+      <thead>
+        <tr id="orders-head"><th scope="col" class="num">序号</th></tr>
+      </thead>
+      <tbody id="orders-tbody"></tbody>
+    </table>
+  </div>
+  <footer class="orders-foot">
+    <div class="orders-foot-main">
+      <p class="orders-pageinfo" id="orders-pageinfo"></p>
+      <div class="orders-tools">
+        <label for="orders-size">每页</label>
+        <div class="select-wrap select-mini">
+          <select id="orders-size">
+            <option value="10" selected>10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+          </select>
+          <svg class="ico ico-xs select-caret" aria-hidden="true"><use href="#i-chev-down"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="pager" id="orders-pager"></div>
+  </footer>
+</dialog>
+
+<dialog class="dialog dialog-form" id="add-dialog" aria-labelledby="add-dialog-title">
+  <form method="dialog" id="add-form" novalidate>
+    <header class="dialog-head">
+      <div class="dialog-heading">
+        <div class="dialog-heading-text dlg-head-main">
+          <img class="dialog-ico" src="icons/add.png" alt="" aria-hidden="true">
+          <div class="dlg-head-text">
+            <h2 id="add-dialog-title"><span id="add-dialog-title-text">添加重点事项</span></h2>
+            <p class="dialog-sub" id="add-dialog-sub">配置该重点事项的名称、业务定义、扩展标签、关键词与关联承办单位</p>
+          </div>
+        </div>
+      </div>
+      <button class="icon-btn" type="button" id="add-close" aria-label="关闭"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></button>
+    </header>
+    <div class="dialog-body">
+      <section class="form-step">
+        <label class="step-head" for="add-name">
+          <span class="req" aria-hidden="true">*</span>
+          <span class="step-no">1.</span><span class="step-text">事项名称</span>
+        </label>
+        <input class="input-text" id="add-name" type="text" maxlength="30" required
+               placeholder="例如：政风行风类、交通管理类、涉黄涉赌类...">
+        <p class="field-error" id="add-name-error">请填写事项名称（不超过 30 字）</p>
+      </section>
+
+      <section class="form-step">
+        <label class="step-head" for="add-cat">
+          <span class="step-ico" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#i-layers"/></svg></span>
+          <span class="step-no">2.</span><span class="step-text">市局业务分类</span>
+        </label>
+        <div class="select-wrap dialog-select">
+          <select id="add-cat" aria-label="市局业务分类"></select>
+          <svg class="ico ico-xs select-caret" aria-hidden="true"><use href="#i-chev-down"/></svg>
+        </div>
+      </section>
+
+      <section class="form-step">
+        <label class="step-head" for="tags-input">
+          <span class="step-ico" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#i-filter"/></svg></span>
+          <span class="step-no">3.</span><span class="step-text">扩展标签</span>
+        </label>
+        <div class="tag-box"><span class="tag-list" id="tags-list"></span>
+          <input class="tag-input" id="tags-input" type="text"
+                 placeholder="点击选择或输入搜索标签（输入未有内容按回车可新建）..."></div>
+      </section>
+
+      <section class="form-step">
+        <h3 class="step-head">
+          <span class="step-ico" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#i-list"/></svg></span>
+          <span class="step-no">4.</span><span class="step-text">关键词规则</span>
+        </h3>
+        <div class="kw-group">
+          <div class="kw-block">
+            <div class="kw-head">
+              <span class="kw-title"><i class="kw-dot" aria-hidden="true"></i>包含关键词（输入后按回车 Enter 添加）：</span>
+              <span class="tag-counter" id="includes-count">已添加 0 个</span>
+            </div>
+            <div class="kw-row">
+              <input class="input-text" id="includes-input" type="text"
+                     placeholder="输入包含关键词后按回车（如：态度生硬、推卸责任、堵车）...">
+              <button class="btn btn-subtle btn-add" type="button" data-add="includes">
+                <svg class="ico ico-xs" aria-hidden="true"><use href="#i-plus"/></svg>添加</button>
+            </div>
+            <div class="kw-view" id="includes-view"></div>
+          </div>
+          <div class="kw-block exclude">
+            <div class="kw-head">
+              <span class="kw-title"><i class="kw-dot" aria-hidden="true"></i>不包含关键词（排除规则，命中则不纳入该事项）：</span>
+              <span class="tag-counter" id="excludes-count">已添加 0 个</span>
+            </div>
+            <div class="kw-row">
+              <input class="input-text" id="excludes-input" type="text"
+                     placeholder="输入不包含关键词后按回车（如：咨询、表扬、求助）...">
+              <button class="btn btn-danger btn-add" type="button" data-add="excludes">
+                <svg class="ico ico-xs" aria-hidden="true"><use href="#i-plus"/></svg>添加</button>
+            </div>
+            <div class="kw-view" id="excludes-view"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-step">
+        <label class="step-head" for="add-unit">
+          <span class="step-ico" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#i-building"/></svg></span>
+          <span class="step-no">5.</span><span class="step-text">关联承办单位</span>
+        </label>
+        <div class="select-wrap dialog-select">
+          <select id="add-unit" aria-label="关联承办单位"></select>
+          <svg class="ico ico-xs select-caret" aria-hidden="true"><use href="#i-chev-down"/></svg>
+        </div>
+      </section>
+    </div>
+    <footer class="dialog-foot">
+      <button class="btn btn-ghost" type="button" id="add-cancel">取消</button>
+      <button class="btn btn-primary" type="submit" id="add-submit">确认添加</button>
+    </footer>
+  </form>
+</dialog>
+
+<script src="data.js?v=59"></script>
+<script src="charts.js?v=59"></script>
+<script src="app.js?v=59"></script>
+</body>
+</html>
